@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sound Localization Dataset Recorder</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/idb@7/build/umd.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎙️ Sound Localization Dataset Recorder</h1>
+            <p class="subtitle">Pure Stereo Recording for DOA Prediction</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Microphone Status -->
+            <section class="status-section">
+                <div class="mic-status-card">
+                    <div class="mic-indicator inactive"></div>
+                    <div class="mic-status-text" id="mic-status-text">Initializing...</div>
+                </div>
+                <div id="status-message" class="status-message">Loading...</div>
+            </section>
+
+            <!-- Recording Controls -->
+            <section class="controls-section">
+                <div class="control-group">
+                    <label for="direction-select">Direction (degrees):</label>
+                    <select id="direction-select" class="form-control">
+                        <option value="0">0°</option>
+                        <option value="30">30°</option>
+                        <option value="45">45°</option>
+                        <option value="60">60°</option>
+                        <option value="90">90°</option>
+                        <option value="120">120°</option>
+                        <option value="135">135°</option>
+                        <option value="150">150°</option>
+                        <option value="180">180°</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="distance-select">Distance (feet):</label>
+                    <select id="distance-select" class="form-control">
+                        <option value="1">1 ft</option>
+                        <option value="2">2 ft</option>
+                        <option value="3">3 ft</option>
+                        <option value="4">4 ft</option>
+                        <option value="5">5 ft</option>
+                        <option value="6">6 ft</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="duration-select">Duration (seconds):</label>
+                    <select id="duration-select" class="form-control">
+                        <option value="2">2 sec</option>
+                        <option value="3">3 sec</option>
+                        <option value="5">5 sec</option>
+                        <option value="10">10 sec</option>
+                    </select>
+                </div>
+
+                <div class="control-group checkbox">
+                    <input type="checkbox" id="buzzer-enabled" checked>
+                    <label for="buzzer-enabled">Play buzzer before recording</label>
+                </div>
+            </section>
+
+            <!-- Record Button -->
+            <section class="record-section">
+                <button id="record-button" class="btn btn-primary btn-large">
+                    🎤 <span id="record-button-text">Record</span>
+                </button>
+                <button id="stop-button" class="btn btn-secondary btn-large hidden">
+                    ⏹️ Stop
+                </button>
+                <div id="countdown-timer" class="countdown-timer hidden">00:00</div>
+            </section>
+
+            <!-- Recordings List -->
+            <section class="recordings-section">
+                <h2>Recordings (<span id="file-count">0</span>)</h2>
+                <div id="recordings-list" class="recordings-list">
+                    <div class="empty-state">
+                        <p>📄 No recordings yet. Start recording to see your files here.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Download/Clear Section -->
+            <section class="actions-section">
+                <button id="download-all-button" class="btn btn-secondary">💾 Download All</button>
+                <button id="clear-all-button" class="btn btn-danger">🗑️ Clear All</button>
+            </section>
+
+            <!-- Statistics -->
+            <section class="stats-section">
+                <h3>Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Total Recordings:</span>
+                        <span class="stat-value" id="stat-total">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Total Size:</span>
+                        <span class="stat-value" id="stat-size">0 MB</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Status:</span>
+                        <span class="stat-value" id="stat-status">Offline</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Hidden Audio Player -->
+    <audio id="playback-audio" style="display: none;"></audio>
+
+    <!-- Scripts -->
+    <script src="buzzer_generator.js"></script>
+    <script src="download_manager.js"></script>
+    <script src="session_manager.js"></script>
+    <script src="app.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js').catch(() => {
+                console.warn('Service Worker registration failed');
+            });
+        }
+    </script>
+</body>
+</html>
